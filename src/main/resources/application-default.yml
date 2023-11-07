@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/netflixclone?serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=UTF-8
+    username: qjawls5714
+    password: 1234
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+  decorator:
+    datasource:
+      p6spy:
+        enable-logging: false
+
+server:
+  port: 8080
