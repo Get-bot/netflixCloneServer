@@ -3,14 +3,14 @@ package com.netflixclone.app.service.role;
 import com.netflixclone.app.entity.role.Role;
 import com.netflixclone.app.enums.ERole;
 import com.netflixclone.app.repository.role.RoleRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class RoleServiceImpl implements RoleService {
 
   private final RoleRepository roleRepository;

@@ -2,16 +2,16 @@ package com.netflixclone.app.security;
 
 import com.netflixclone.app.security.jwt.AuthEntryPointJwt;
 import com.netflixclone.app.security.jwt.AuthTokenFilter;
+import com.netflixclone.app.security.jwt.JwtUtils;
 import com.netflixclone.app.security.services.UserDetailsServiceImpl;
-import lombok.AllArgsConstructor;
+import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -25,25 +25,23 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class WebSecurityConfig {
 
   private final UserDetailsServiceImpl userDetailsService;
-
   private final AuthEntryPointJwt unauthorizedHandler;
+  private final JwtUtils jwtUtils;
 
   @Bean
-  public AuthTokenFilter authenticationJwtTokenFilter() {
-    return new AuthTokenFilter();
+  public AuthTokenFilter authTokenFilter() {
+    return new AuthTokenFilter(jwtUtils, userDetailsService);
   }
 
   @Bean
   public DaoAuthenticationProvider authenticationProvider() {
     DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-
     authProvider.setUserDetailsService(userDetailsService);
     authProvider.setPasswordEncoder(passwordEncoder());
-
     return authProvider;
   }
 
@@ -70,7 +68,7 @@ public class WebSecurityConfig {
 
     http.authenticationProvider(authenticationProvider());
 
-    http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+    http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
   }

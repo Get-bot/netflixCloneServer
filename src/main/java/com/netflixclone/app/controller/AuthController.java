@@ -13,7 +13,7 @@ import com.netflixclone.app.security.jwt.JwtUtils;
 import com.netflixclone.app.security.services.UserDetailsImpl;
 import com.netflixclone.app.service.role.RoleService;
 import com.netflixclone.app.service.user.UserService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,7 +29,7 @@ import java.util.Set;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AuthController {
   private final AuthenticationManager authenticationManager;
 
@@ -46,6 +46,7 @@ public class AuthController {
 
   @PostMapping("/signup")
   public ResponseEntity<?> registerAndAuthenticateUser(@RequestBody SignupRequest signupRequest) throws CustomException {
+
     // 유저 등록
     userService.registerUser(signupRequest);
 
